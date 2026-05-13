@@ -44,8 +44,8 @@ pipeline {
         stage('Deploy Container') {
             steps {
                 echo 'Deploying...'
-                bat "docker stop ${CONTAINER_NAME} 2>NUL || echo not running"
-                bat "docker rm ${CONTAINER_NAME} 2>NUL || echo not found"
+                bat returnStatus: true, script: "docker stop ${CONTAINER_NAME}"
+                bat returnStatus: true, script: "docker rm ${CONTAINER_NAME}"
                 bat "docker run -d -p 5000:5000 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
             }
         }
@@ -54,8 +54,8 @@ pipeline {
     post {
         always {
             echo "Updating application dashboard with build status..."
-            bat """
-                curl -X POST http://localhost:5000/api/update-status -H "Content-Type: application/json" -d "{\\"build_number\\": \\"${env.BUILD_NUMBER}\\", \\"status\\": \\"${currentBuild.currentResult}\\"}" || echo failed
+            bat returnStatus: true, script: """
+                curl -X POST http://localhost:5000/api/update-status -H "Content-Type: application/json" -d "{\\"build_number\\": \\"${env.BUILD_NUMBER}\\", \\"status\\": \\"${currentBuild.currentResult}\\"}"
             """
         }
     }
