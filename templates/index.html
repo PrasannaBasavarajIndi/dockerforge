@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DockerForge Tasks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">DockerForge</div>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}" class="active">Tasks</a>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Task Manager</h2>
+            <form action="{{ url_for('add_task') }}" method="POST" class="task-form">
+                <input type="text" name="title" placeholder="What needs to be done?" required>
+                <button type="submit" class="btn btn-primary">Add Task</button>
+            </form>
+
+            <ul class="task-list">
+                {% for task in tasks %}
+                <li class="task-item">
+                    <span class="task-title">{{ task.title }}</span>
+                    <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </li>
+                {% else %}
+                <li class="empty-state">No tasks pending. You're all caught up!</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

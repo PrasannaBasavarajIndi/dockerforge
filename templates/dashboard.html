@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Dashboard - DockerForge</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta http-equiv="refresh" content="5">
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">DockerForge</div>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Tasks</a>
+            <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header-section">
+            <h2>CI/CD Live Monitor</h2>
+            <p>Automatically updating every 5 seconds</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card stat-card">
+                <h3>Build Number</h3>
+                <div class="stat-value">#{{ build_status.build_number }}</div>
+            </div>
+
+            <div class="card stat-card">
+                <h3>Build Status</h3>
+                {% if build_status.status|lower == 'success' %}
+                    <div class="stat-value status-success">{{ build_status.status }}</div>
+                {% elif build_status.status|lower == 'failure' %}
+                    <div class="stat-value status-failure">{{ build_status.status }}</div>
+                {% else %}
+                    <div class="stat-value">{{ build_status.status }}</div>
+                {% endif %}
+            </div>
+
+            <div class="card stat-card">
+                <h3>Last Deployment</h3>
+                <div class="stat-value text-small">{{ build_status.timestamp }}</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
