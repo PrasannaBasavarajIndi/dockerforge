@@ -16,9 +16,9 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                sh '''
-                    python3 -m venv venv
-                    . venv/bin/activate
+                bat '''
+                    python -m venv venv
+                    call venv\\Scripts\\activate.bat
                     pip install -r requirements.txt
                 '''
             }
@@ -27,8 +27,8 @@ pipeline {
         stage('Run Automated Tests') {
             steps {
                 echo 'Running tests...'
-                sh '''
-                    . venv/bin/activate
+                bat '''
+                    call venv\\Scripts\\activate.bat
                     pytest test_app.py -v
                 '''
             }
@@ -37,16 +37,16 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building image...'
-                sh "docker build -t ${IMAGE_NAME} ."
+                bat "docker build -t ${IMAGE_NAME} ."
             }
         }
 
         stage('Deploy Container') {
             steps {
                 echo 'Deploying...'
-                sh "docker stop ${CONTAINER_NAME} || true"
-                sh "docker rm ${CONTAINER_NAME} || true"
-                sh "docker run -d -p 5000:5000 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+                bat "docker stop ${CONTAINER_NAME} 2>NUL || echo not running"
+                bat "docker rm ${CONTAINER_NAME} 2>NUL || echo not found"
+                bat "docker run -d -p 5000:5000 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
             }
         }
     }
@@ -54,12 +54,8 @@ pipeline {
     post {
         always {
             echo "Updating application dashboard with build status..."
-            // Send the BUILD_NUMBER and currentBuild.currentResult to the Flask API
-            // Using curl pointing to the container mapped on host port 5000
-            sh """
-                curl -X POST http://localhost:5000/api/update-status \\
-                -H "Content-Type: application/json" \\
-                -d '{"build_number": "${env.BUILD_NUMBER}", "status": "${currentBuild.currentResult}"}' || true
+            bat """
+                curl -X POST http://localhost:5000/api/update-status -H "Content-Type: application/json" -d "{\\"build_number\\": \\"${env.BUILD_NUMBER}\\", \\"status\\": \\"${currentBuild.currentResult}\\"}" || echo failed
             """
         }
     }
