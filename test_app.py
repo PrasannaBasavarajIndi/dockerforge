@@ -9,7 +9,7 @@ def client():
 
 def test_homepage_loads(client):
     response = client.get('/')
-    assert response.status_code == 500
+    assert response.status_code == 200
     assert b'DockerForge' in response.data or b'Task' in response.data
 
 def test_add_task(client):
