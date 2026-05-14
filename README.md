@@ -24,4 +24,4 @@ This project is a demonstration of a fully automated, local CI/CD pipeline built
 
 * Update: Testing the automated GitHub Webhook trigger! (Build #13)
 
-lalalalalaal
+lalal
