@@ -55,6 +55,7 @@ pipeline {
         always {
             echo "Updating application dashboard with build status..."
             bat returnStatus: true, script: """
+                timeout /t 5 /nobreak > NUL
                 curl -X POST http://localhost:5000/api/update-status -H "Content-Type: application/json" -d "{\\"build_number\\": \\"${env.BUILD_NUMBER}\\", \\"status\\": \\"${currentBuild.currentResult}\\"}"
             """
         }
