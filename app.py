@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
 
@@ -45,7 +45,10 @@ def update_status():
     
     build_status['build_number'] = data.get('build_number', build_status['build_number'])
     build_status['status'] = data.get('status', build_status['status'])
-    build_status['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Calculate IST correctly since Docker containers run in UTC by default
+    ist_time = datetime.now(timezone.utc) + timedelta(hours=5, minutes=30)
+    build_status['timestamp'] = ist_time.strftime("%Y-%m-%d %H:%M:%S")
     
     return jsonify({"message": "Status updated successfully", "current_status": build_status}), 200
 
