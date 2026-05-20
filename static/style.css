@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --bg-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    --card-bg: rgba(255, 255, 255, 0.6);
-    --card-border: rgba(255, 255, 255, 0.3);
-    --text-main: #1e293b;
-    --text-muted: #475569;
-    --primary: #f97316;
-    --primary-hover: #ea580c;
+    --bg-gradient: linear-gradient(135deg, #bfdbfe 0%, #a7f3d0 100%);
+    --card-bg: rgba(255, 255, 255, 0.65);
+    --card-border: rgba(255, 255, 255, 0.4);
+    --text-main: #0f172a;
+    --text-muted: #334155;
+    --primary: #0ea5e9;
+    --primary-hover: #0284c7;
     --danger: #ef4444;
     --danger-hover: #dc2626;
-    --success: #10b981;
-    --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    --success: #059669;
+    --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
     --blur: blur(12px);
 }
 
@@ -46,7 +46,7 @@ body {
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--text-main);
-    background: linear-gradient(to right, #ea580c, #f43f5e);
+    background: linear-gradient(to right, #0284c7, #059669);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -64,7 +64,7 @@ body {
 .nav-links a:hover, .nav-links a.active {
     color: #fff;
     background: var(--primary);
-    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
 }
 
 /* Layout */
@@ -116,7 +116,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
     background: #fff;
-    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
     border-color: var(--primary);
 }
 
@@ -133,13 +133,13 @@ input[type="text"]:focus {
 .btn-primary {
     background: var(--primary);
     color: white;
-    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
 }
 
 .btn-primary:hover {
     background: var(--primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+    box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
 }
 
 .btn-danger {
@@ -201,7 +201,7 @@ input[type="text"]:focus {
 
 .header-section h2 {
     font-size: 2.5rem;
-    background: linear-gradient(to right, #ea580c, #f43f5e);
+    background: linear-gradient(to right, #0284c7, #059669);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
