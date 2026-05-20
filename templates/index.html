@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks</title>
+    <title>Tasks - DockerForge</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -18,24 +18,100 @@
     <div class="container">
         <div class="card">
             <h2>DockerForge 2.0</h2>
-            <form action="{{ url_for('add_task') }}" method="POST" class="task-form">
-                <input type="text" name="title" placeholder="What needs to be done?" required>
+            <form id="task-form" class="task-form">
+                <input type="text" id="task-input" placeholder="What needs to be done?" required>
                 <button type="submit" class="btn btn-primary">Add Task</button>
             </form>
 
-            <ul class="task-list">
-                {% for task in tasks %}
-                <li class="task-item">
-                    <span class="task-title">{{ task.title }}</span>
-                    <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </li>
-                {% else %}
-                <li class="empty-state">No tasks pending. You're all caught up!</li>
-                {% endfor %}
+            <ul id="task-list" class="task-list">
+                <!-- Tasks will be loaded here dynamically via JavaScript -->
             </ul>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadTasks);
+
+        const form = document.getElementById('task-form');
+        const taskInput = document.getElementById('task-input');
+        const taskList = document.getElementById('task-list');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = taskInput.value.trim();
+            if (!title) return;
+
+            try {
+                const response = await fetch('/api/tasks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title })
+                });
+                
+                if (response.ok) {
+                    const newTask = await response.json();
+                    taskInput.value = '';
+                    addTaskToDOM(newTask);
+                    removeEmptyState();
+                }
+            } catch (error) {
+                console.error("Error adding task", error);
+            }
+        });
+
+        async function loadTasks() {
+            try {
+                const response = await fetch('/api/tasks');
+                const tasks = await response.json();
+                
+                taskList.innerHTML = '';
+                if (tasks.length === 0) {
+                    showEmptyState();
+                } else {
+                    tasks.forEach(task => addTaskToDOM(task));
+                }
+            } catch (error) {
+                console.error("Error loading tasks", error);
+            }
+        }
+
+        function addTaskToDOM(task) {
+            const li = document.createElement('li');
+            li.className = 'task-item';
+            li.id = `task-${task.id}`;
+            li.innerHTML = `
+                <span class="task-title">${task.title}</span>
+                <button onclick="deleteTask(${task.id})" class="btn btn-danger">Delete</button>
+            `;
+            taskList.appendChild(li);
+        }
+
+        async function deleteTask(id) {
+            try {
+                const response = await fetch(`/api/tasks/${id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    document.getElementById(`task-${id}`).remove();
+                    if (taskList.children.length === 0) {
+                        showEmptyState();
+                    }
+                }
+            } catch (error) {
+                console.error("Error deleting task", error);
+            }
+        }
+
+        function showEmptyState() {
+            taskList.innerHTML = `<li class="empty-state">No tasks pending. You're all caught up!</li>`;
+        }
+
+        function removeEmptyState() {
+            const emptyState = document.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+        }
+    </script>
 </body>
 </html>

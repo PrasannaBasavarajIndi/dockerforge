@@ -1,3 +1,5 @@
 flask
 pytest
 requests
+Flask-SQLAlchemy
+flake8

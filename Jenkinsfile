@@ -24,6 +24,16 @@ pipeline {
             }
         }
 
+        stage('Lint Code') {
+            steps {
+                echo 'Linting code with flake8...'
+                bat '''
+                    call venv\\Scripts\\activate.bat
+                    flake8 app.py test_app.py --max-line-length=120
+                '''
+            }
+        }
+
         stage('Run Automated Tests') {
             steps {
                 echo 'Running tests...'
@@ -46,7 +56,7 @@ pipeline {
                 echo 'Deploying...'
                 bat returnStatus: true, script: "docker stop ${CONTAINER_NAME}"
                 bat returnStatus: true, script: "docker rm ${CONTAINER_NAME}"
-                bat "docker run -d -p 5000:5000 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+                bat "docker run -d -p 5000:5000 -v dockerforge_data:/app/data --name ${CONTAINER_NAME} ${IMAGE_NAME}"
             }
         }
     }
