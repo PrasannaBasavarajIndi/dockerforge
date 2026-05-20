@@ -247,3 +247,58 @@ input[type="text"]:focus {
 .status-failure {
     color: var(--danger);
 }
+
+/* Liquid Glass Blobs */
+body {
+    position: relative;
+    overflow-x: hidden;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: -1;
+    opacity: 0.8;
+    animation: float 10s infinite ease-in-out alternate;
+}
+
+.blob-1 {
+    width: 300px;
+    height: 300px;
+    background: #7dd3fc; /* Light Sky Blue */
+    top: 10%;
+    left: 15%;
+    animation-delay: 0s;
+}
+
+.blob-2 {
+    width: 400px;
+    height: 400px;
+    background: #34d399; /* Mint Green */
+    top: 40%;
+    right: 10%;
+    animation-delay: -3s;
+}
+
+.blob-3 {
+    width: 250px;
+    height: 250px;
+    background: #38bdf8; /* Deeper Blue */
+    bottom: -5%;
+    left: 30%;
+    animation-delay: -6s;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(50px, 50px) scale(1.1); }
+}
+
+/* Enhanced Glassmorphism for Liquid Effect */
+.card, .navbar {
+    background: rgba(255, 255, 255, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.8);
+    border-left: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 32px 0 rgba(14, 165, 233, 0.15);
+}
