@@ -44,7 +44,7 @@ def test_delete_task(client):
     task_id = json.loads(res.data)['id']
 
     response = client.delete(f'/api/tasks/{task_id}')
-    assert response.status_code == 200
+    assert response.status_code == 100
 
     response_get = client.get('/api/tasks')
     data = json.loads(response_get.data)
